@@ -7,10 +7,11 @@
             <a class="hover:text-amber-300" href="{{ route('portfolio.index') }}">Portfolio</a>
             <a class="hover:text-amber-300" href="{{ route('services.index') }}">Services</a>
             <a class="hover:text-amber-300" href="{{ route('about') }}">About</a>
+            <a class="hover:text-amber-300" href="{{ route('bookings.create') }}">Book</a>
             <a class="hover:text-amber-300" href="{{ route('contact.show') }}">Contact</a>
         </nav>
-        <a href="{{ route('contact.show') }}" class="rounded-full bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900">
-            Request a Quote
+        <a href="{{ route('bookings.create') }}" class="rounded-full bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900">
+            Book a Consultation
         </a>
     </div>
 </header>
