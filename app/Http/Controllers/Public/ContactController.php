@@ -37,7 +37,16 @@ class ContactController extends Controller
             'phone' => ['required', 'string', 'max:50'],
             'service_id' => ['nullable', 'exists:services,id'],
             'message' => ['nullable', 'string', 'max:2000'],
+            'address_text' => ['nullable', 'string', 'max:255'],
+            'postcode' => ['nullable', 'string', 'max:50'],
+            'photos.*' => ['nullable', 'image', 'max:5120'],
         ]);
+
+        if ($request->hasFile('photos')) {
+            $data['photos'] = collect($request->file('photos'))
+                ->map(fn ($photo) => $photo->store('quote-requests', 'public'))
+                ->all();
+        }
 
         $quoteRequest = QuoteRequest::query()->create($data);
         $quoteRequest->load('service');

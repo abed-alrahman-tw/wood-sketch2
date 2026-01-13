@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\BlockedTimeController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\QuoteRequestController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\BookingController;
@@ -41,9 +43,16 @@ Route::middleware(['auth', 'admin'])
         Route::resource('projects', ProjectController::class)
             ->except(['show'])
             ->names('admin.projects');
+        Route::resource('quote-requests', QuoteRequestController::class)
+            ->only(['index', 'show', 'update'])
+            ->names('admin.quote-requests');
+        Route::post('quote-requests/{quoteRequest}/convert', [QuoteRequestController::class, 'convert'])
+            ->name('admin.quote-requests.convert');
         Route::resource('bookings', AdminBookingController::class)
             ->only(['index', 'show', 'update'])
             ->names('admin.bookings');
+        Route::get('customers/{customer}', [CustomerController::class, 'show'])
+            ->name('admin.customers.show');
         Route::resource('blocked-times', BlockedTimeController::class)
             ->only(['index', 'store', 'destroy'])
             ->names('admin.blocked-times');
