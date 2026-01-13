@@ -25,6 +25,7 @@ class QuoteRequest extends Model
         'status',
         'estimated_range_min',
         'estimated_range_max',
+        'admin_notes',
     ];
 
     protected $casts = [

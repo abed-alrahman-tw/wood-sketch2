@@ -18,6 +18,7 @@
                 <a href="{{ route('admin.categories.index') }}" class="hover:text-gray-900">Categories</a>
                 <a href="{{ route('admin.services.index') }}" class="hover:text-gray-900">Services</a>
                 <a href="{{ route('admin.projects.index') }}" class="hover:text-gray-900">Projects</a>
+                <a href="{{ route('admin.quote-requests.index') }}" class="hover:text-gray-900">Quote Requests</a>
                 <a href="{{ route('admin.bookings.index') }}" class="hover:text-gray-900">Bookings</a>
                 <a href="{{ route('admin.blocked-times.index') }}" class="hover:text-gray-900">Blocked Times</a>
             </nav>
