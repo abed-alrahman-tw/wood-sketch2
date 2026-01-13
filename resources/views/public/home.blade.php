@@ -1,6 +1,7 @@
 @extends('public.layout')
 
 @section('content')
+@php($isLowData = request()->cookie('low_data') === '1')
 <section class="relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-br from-amber-400/20 via-slate-900/40 to-slate-950"></div>
     <div class="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-2">
@@ -48,9 +49,20 @@
     <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         @forelse($featuredProjects as $project)
             <a href="{{ route('portfolio.show', $project->slug) }}" class="group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:-translate-y-1">
-                <div class="aspect-[4/3] overflow-hidden rounded-xl bg-slate-800">
+                <div class="media-frame relative aspect-[4/3] overflow-hidden rounded-xl bg-slate-800 is-loading">
                     @if($project->cover_image)
-                        <img src="{{ asset('storage/'.$project->cover_image) }}" alt="{{ $project->title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                        @php($thumbnail = $project->coverThumbnailPath())
+                        <img
+                            src="{{ asset('storage/'.(($isLowData && $thumbnail) ? $thumbnail : $project->cover_image)) }}"
+                            @if($thumbnail)
+                                srcset="{{ asset('storage/'.$thumbnail) }} 480w, {{ asset('storage/'.$project->cover_image) }} 960w"
+                            @endif
+                            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
+                            loading="lazy"
+                            decoding="async"
+                            alt="{{ $project->title }}"
+                            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        >
                     @endif
                 </div>
                 <div class="mt-4">

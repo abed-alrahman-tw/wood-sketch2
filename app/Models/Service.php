@@ -5,10 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class Service extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            Cache::forget('home.services');
+        });
+
+        static::deleted(function () {
+            Cache::forget('home.services');
+        });
+    }
 
     protected $fillable = [
         'name',

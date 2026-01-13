@@ -19,12 +19,19 @@
             <div class="mt-8 grid gap-4 md:grid-cols-2">
                 @foreach($gallery as $index => $image)
                     <button
-                        class="group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900"
+                        class="group media-frame relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900 is-loading"
                         type="button"
                         data-gallery-trigger
                         data-index="{{ $index }}"
                     >
-                        <img src="{{ asset('storage/'.$image) }}" alt="{{ $project->title }} image" class="h-64 w-full object-cover transition duration-500 group-hover:scale-105">
+                        <img
+                            src="{{ asset('storage/'.$image) }}"
+                            sizes="(min-width: 1024px) 45vw, (min-width: 768px) 50vw, 100vw"
+                            loading="lazy"
+                            decoding="async"
+                            alt="{{ $project->title }} image"
+                            class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+                        >
                         <span class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 transition group-hover:opacity-100"></span>
                     </button>
                 @endforeach

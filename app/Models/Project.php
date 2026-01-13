@@ -6,10 +6,35 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class Project extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            static::flushHomeCaches();
+            static::bumpPortfolioCacheVersion();
+        });
+
+        static::deleted(function () {
+            static::flushHomeCaches();
+            static::bumpPortfolioCacheVersion();
+        });
+    }
+
+    protected static function flushHomeCaches(): void
+    {
+        Cache::forget('home.featuredProjects');
+    }
+
+    protected static function bumpPortfolioCacheVersion(): void
+    {
+        $current = Cache::get('portfolio.projects.version', 1);
+        Cache::put('portfolio.projects.version', $current + 1);
+    }
 
     protected $fillable = [
         'title',
