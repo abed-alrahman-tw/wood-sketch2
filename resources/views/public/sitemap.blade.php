@@ -17,7 +17,19 @@
         <changefreq>monthly</changefreq>
     </url>
     <url>
+        <loc>{{ route('reviews') }}</loc>
+        <changefreq>monthly</changefreq>
+    </url>
+    <url>
+        <loc>{{ route('videos') }}</loc>
+        <changefreq>monthly</changefreq>
+    </url>
+    <url>
         <loc>{{ route('contact.show') }}</loc>
+        <changefreq>monthly</changefreq>
+    </url>
+    <url>
+        <loc>{{ route('bookings.create') }}</loc>
         <changefreq>monthly</changefreq>
     </url>
     @foreach($projects as $project)

@@ -17,7 +17,10 @@
                     <li><a class="hover:text-amber-300" href="{{ route('portfolio.index') }}">Portfolio</a></li>
                     <li><a class="hover:text-amber-300" href="{{ route('services.index') }}">Services</a></li>
                     <li><a class="hover:text-amber-300" href="{{ route('about') }}">About</a></li>
-                    <li><a class="hover:text-amber-300" href="{{ route('contact.show') }}">Contact</a></li>
+                    <li><a class="hover:text-amber-300" href="{{ route('reviews') }}">Reviews</a></li>
+                    <li><a class="hover:text-amber-300" href="{{ route('videos') }}">Videos</a></li>
+                    <li><a class="hover:text-amber-300" href="{{ route('bookings.create') }}">Book</a></li>
+                    <li><a class="hover:text-amber-300" href="{{ route('contact.show') }}">Quick Quote</a></li>
                 </ul>
             </div>
         </div>
