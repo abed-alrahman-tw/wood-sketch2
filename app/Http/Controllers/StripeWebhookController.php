@@ -19,6 +19,9 @@ class StripeWebhookController extends Controller
 
         $payload = $request->getContent();
         $signature = $request->header('Stripe-Signature');
+        if (! $signature) {
+            return response('Missing signature.', 400);
+        }
 
         try {
             $event = Webhook::constructEvent($payload, $signature, $secret);
@@ -30,6 +33,9 @@ class StripeWebhookController extends Controller
 
         if ($event->type === 'checkout.session.completed') {
             $session = $event->data->object;
+            if (($session->payment_status ?? null) !== 'paid') {
+                return response('Checkout session not paid.', 200);
+            }
             $jobId = $session->metadata->job_id ?? $session->client_reference_id ?? null;
 
             if ($jobId) {
