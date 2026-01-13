@@ -31,7 +31,7 @@
             <div class="rounded-2xl border border-white/10 bg-amber-400 p-6 text-slate-900">
                 <h2 class="text-xl font-semibold">Ready for {{ $service->name }}?</h2>
                 <p class="mt-2 text-sm">We craft every detail to align with your lifestyle and space.</p>
-                <a href="{{ route('contact.show') }}" class="mt-4 inline-flex rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white">Schedule a consult</a>
+                <a href="{{ route('bookings.create') }}" class="mt-4 inline-flex rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white">Schedule a consult</a>
             </div>
             <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
                 <p class="text-xs uppercase tracking-[0.3em] text-slate-400">What’s included</p>
