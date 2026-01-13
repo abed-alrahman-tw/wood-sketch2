@@ -1,6 +1,7 @@
 @extends('public.layout')
 
 @section('content')
+@php($isLowData = request()->cookie('low_data') === '1')
 <section class="mx-auto w-full max-w-6xl px-6 py-16">
     <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
@@ -24,9 +25,18 @@
 
                 <div class="mt-4 rounded-xl border border-white/10 bg-slate-950/60 p-4">
                     @if($project->video_file)
-                        <video class="w-full rounded-lg" controls>
-                            <source src="{{ asset('storage/'.$project->video_file) }}" type="video/mp4">
-                        </video>
+                        @if($isLowData)
+                            <div data-video-wrapper data-video-source="{{ asset('storage/'.$project->video_file) }}" class="space-y-3 text-sm text-slate-300">
+                                <p>Low data mode is on. Tap to load the video.</p>
+                                <button type="button" data-video-placeholder class="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white hover:border-amber-300 hover:text-amber-300">
+                                    Load video
+                                </button>
+                            </div>
+                        @else
+                            <video class="w-full rounded-lg" controls preload="metadata" playsinline>
+                                <source src="{{ asset('storage/'.$project->video_file) }}" type="video/mp4">
+                            </video>
+                        @endif
                     @elseif($project->video_url)
                         <p class="text-sm text-slate-300">Watch the video walkthrough:</p>
                         <a href="{{ $project->video_url }}" class="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-amber-300" target="_blank" rel="noopener">
