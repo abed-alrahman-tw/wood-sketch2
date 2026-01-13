@@ -40,6 +40,8 @@
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-widest text-gray-500">Status</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-widest text-gray-500">Quote</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-widest text-gray-500">Booking</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-widest text-gray-500">Deposit</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-widest text-gray-500">Deposit link</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -61,10 +63,54 @@
                                     —
                                 @endif
                             </td>
+                            <td class="px-4 py-4 text-gray-700">
+                                <div class="space-y-2">
+                                    <p class="text-xs uppercase tracking-widest text-gray-400">Status</p>
+                                    <p class="font-semibold text-gray-900">{{ $job->deposit_paid ? 'Paid' : 'Not paid' }}</p>
+                                    <p class="text-xs text-gray-500">
+                                        @if ($job->deposit_type)
+                                            {{ ucfirst($job->deposit_type) }} · £{{ number_format($job->depositAmount() ?? 0, 2) }}
+                                        @else
+                                            Not set
+                                        @endif
+                                    </p>
+                                    <form method="POST" action="{{ route('admin.jobs.deposit.update', $job) }}" class="space-y-2">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div>
+                                            <label class="text-xs uppercase tracking-widest text-gray-400">Type</label>
+                                            <select name="deposit_type" class="mt-1 w-full rounded-lg border border-gray-300 px-2 py-1 text-sm">
+                                                <option value="fixed" @selected(old('deposit_type', $job->deposit_type) === 'fixed')>Fixed (£)</option>
+                                                <option value="percent" @selected(old('deposit_type', $job->deposit_type) === 'percent')>Percent (%)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs uppercase tracking-widest text-gray-400">Amount</label>
+                                            <input type="number" step="0.01" name="deposit_amount" value="{{ old('deposit_amount', $job->deposit_amount) }}" class="mt-1 w-full rounded-lg border border-gray-300 px-2 py-1 text-sm" />
+                                        </div>
+                                        <button type="submit" class="rounded-full bg-indigo-600 px-3 py-1 text-xs font-semibold text-white">Save deposit</button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-gray-700">
+                                <div class="space-y-2 text-sm">
+                                    <p class="text-xs uppercase tracking-widest text-gray-400">Last sent</p>
+                                    <p>{{ $job->deposit_link_sent_at?->format('M j, Y g:i A') ?? 'Not sent' }}</p>
+                                    @if ($job->deposit_link_token)
+                                        <a href="{{ route('deposit.show', ['job' => $job->id, 'token' => $job->deposit_link_token]) }}" class="text-indigo-600">View link</a>
+                                    @endif
+                                    <form method="POST" action="{{ route('admin.jobs.deposit.send', $job) }}">
+                                        @csrf
+                                        <button type="submit" class="rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
+                                            {{ $job->deposit_link_sent_at ? 'Resend link' : 'Send link' }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-4 py-6 text-center text-sm text-gray-500">No jobs yet.</td>
+                            <td colspan="6" class="px-4 py-6 text-center text-sm text-gray-500">No jobs yet.</td>
                         </tr>
                     @endforelse
                 </tbody>
