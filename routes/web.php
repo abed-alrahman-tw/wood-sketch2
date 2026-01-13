@@ -5,11 +5,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\BlockedTimeController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\JobDepositController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\QuoteRequestController;
 use App\Http\Controllers\Admin\ServiceController;
-use App\Http\Controllers\Public\DepositController;
 use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\BookingController;
 use App\Http\Controllers\Public\ContactController;
@@ -18,7 +16,6 @@ use App\Http\Controllers\Public\PortfolioController;
 use App\Http\Controllers\Public\ProjectController as PublicProjectController;
 use App\Http\Controllers\Public\ServiceController as PublicServiceController;
 use App\Http\Controllers\Public\SitemapController;
-use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -32,9 +29,6 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
-Route::get('/deposit/{job}/{token}', [DepositController::class, 'show'])->name('deposit.show');
-Route::post('/deposit/{job}/{token}/checkout', [DepositController::class, 'checkout'])->name('deposit.checkout');
-Route::post('/stripe/webhook', StripeWebhookController::class)->name('stripe.webhook');
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
@@ -57,10 +51,6 @@ Route::middleware(['auth', 'admin'])
         Route::resource('bookings', AdminBookingController::class)
             ->only(['index', 'show', 'update'])
             ->names('admin.bookings');
-        Route::patch('jobs/{job}/deposit', [JobDepositController::class, 'update'])
-            ->name('admin.jobs.deposit.update');
-        Route::post('jobs/{job}/deposit/send', [JobDepositController::class, 'sendLink'])
-            ->name('admin.jobs.deposit.send');
         Route::get('customers/{customer}', [CustomerController::class, 'show'])
             ->name('admin.customers.show');
         Route::resource('blocked-times', BlockedTimeController::class)
@@ -68,4 +58,5 @@ Route::middleware(['auth', 'admin'])
             ->names('admin.blocked-times');
     });
 
+require __DIR__.'/payments.php';
 require __DIR__.'/auth.php';
