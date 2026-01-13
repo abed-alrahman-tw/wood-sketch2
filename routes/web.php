@@ -62,4 +62,5 @@ Route::middleware(['auth', 'admin'])
             ->names('admin.blocked-times');
     });
 
+require __DIR__.'/payments.php';
 require __DIR__.'/auth.php';
