@@ -46,4 +46,16 @@ class Project extends Model
     {
         return $this->hasMany(Job::class);
     }
+
+    public function coverThumbnailPath(): ?string
+    {
+        if (!$this->cover_image) {
+            return null;
+        }
+
+        $extension = pathinfo($this->cover_image, PATHINFO_EXTENSION);
+        $base = substr($this->cover_image, 0, -strlen($extension) - 1);
+
+        return $base.'_thumb.'.$extension;
+    }
 }
